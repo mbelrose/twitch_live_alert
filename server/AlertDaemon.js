@@ -1,9 +1,9 @@
-const express = require('express');
 const { exec } = require('child_process');
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const  = new chrome.Options();
+const options = new chrome.Options();
 options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+options.setScriptTimeout(10000);
 options.addArguments('--headless');
 
 async function getStreamerInfo(streamer) {
@@ -23,22 +23,13 @@ async function getStreamerInfo(streamer) {
   }
 }
 
-const app = express();
-
-app.get('/:streamer', async (req, res) => {
-  const streamer = req.params.streamer;
-  try {
-    const streamerInfo = await getStreamerInfo(streamer);
-    if (streamerInfo.isLive) {
-      exec(`notify-send "${streamer} is live" "${streamerInfo.title} (${streamerInfo.viewerCount} viewers)"`);
-    }
-    res.json(streamerInfo);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal server error');
+const streamer = process.argv[2];
+try {
+  const streamerInfo = await getStreamerInfo(streamer);
+  if (streamerInfo.isLive) {
+    exec(`notify-send "${streamer} is live" "${streamerInfo.title} (${streamerInfo.viewerCount} viewers)"`);
   }
-});
-
-app.listen(8501, () => {
-  console.log('Server listening on port 8501');
-});
+  console.log(res.json(streamerInfo));
+} catch (err) {
+  console.log('Internal server error');
+}
