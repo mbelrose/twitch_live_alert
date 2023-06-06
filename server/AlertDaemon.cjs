@@ -24,12 +24,13 @@ async function getStreamerInfo(streamer) {
 }
 
 const streamer = process.argv[2];
-try {
-  const streamerInfo = await getStreamerInfo(streamer);
+getStreamerInfo(streamer)
+.then( (streamerInfo) => {
   if (streamerInfo.isLive) {
     exec(`notify-send "${streamer} is live" "${streamerInfo.title} (${streamerInfo.viewerCount} viewers)"`);
   }
   console.log(res.json(streamerInfo));
-} catch (err) {
-  console.log('Internal server error');
-}
+})
+.catch( () => {
+  console.log('error');
+});
