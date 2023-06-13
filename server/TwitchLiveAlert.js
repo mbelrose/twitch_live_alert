@@ -8,7 +8,6 @@ const sleep = promisify(setTimeout);
 const CONFIG_FILE = '../config/config.json';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
-const VIEW_SCRIPT='/media/mint/Local\ Disk/Users/user.DESKTOP-6UBKKRI/Documents/local_script/twitch_streamlink_scripts/twitch_vod.sh';
 
 async function readConfigFile() {
   console.log(`Reading config file ${CONFIG_FILE}`);
@@ -42,8 +41,10 @@ async function checkStreamers(ids, clientId, accessToken) {
   for (const id of ids) {
     const streamerInfo = await getStreamerInfo(id, clientId, accessToken);
     if (streamerInfo) {
-      console.log(`${streamerInfo.name} is live (${streamerInfo.viewerCount} viewers)`);
-      const command = `notify-send "${streamerInfo.name} is live" "${streamerInfo.title} (${streamerInfo.viewerCount} viewers)" --action "bash -c \\"${VIEW_SCRIPT} ${streamerInfo.id}\\""`;
+      const toast_message = `${streamerInfo.name} is live (${streamerInfo.viewerCount} viewers)`;
+      const command = `notify-send "${toast_message}" -t 3000`;
+      console.log(toast_message);
+      console.log(command);
       exec(command);
     } else {
       console.log(`${id} is not live`);
