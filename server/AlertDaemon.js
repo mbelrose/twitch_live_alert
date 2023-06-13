@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 import { exec } from 'child_process';
 import fetch from 'node-fetch';
 import { promisify } from 'util';
@@ -11,7 +11,8 @@ const POLL_INTERVAL_MS = 600000; // 10 minutes
 const VIEW_SCRIPT='/media/mint/Local\ Disk/Users/user.DESKTOP-6UBKKRI/Documents/local_script/twitch_streamlink_scripts/twitch_vod.sh';
 
 async function readConfigFile() {
-  const data = await fs.promises.readFile(CONFIG_FILE);
+  console.log(`Reading config file ${CONFIG_FILE}`);
+  const data = await readFile(CONFIG_FILE);
   const config = JSON.parse(data);
   return config;
 }
