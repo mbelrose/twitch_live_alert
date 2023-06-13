@@ -1,7 +1,8 @@
-const fs = require('fs');
-const { exec } = require('child_process');
-const fetch = require('node-fetch');
-const { promisify } = require('util');
+import fs from 'fs/promises';
+import { exec } from 'child_process';
+import fetch from 'node-fetch';
+import { promisify } from 'util';
+
 const sleep = promisify(setTimeout);
 
 const CONFIG_FILE = 'config.json';
