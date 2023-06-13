@@ -5,7 +5,7 @@ import { promisify } from 'util';
 
 const sleep = promisify(setTimeout);
 
-const CONFIG_FILE = 'config.json';
+const CONFIG_FILE = '../config/config.json';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 const VIEW_SCRIPT='/media/mint/Local\ Disk/Users/user.DESKTOP-6UBKKRI/Documents/local_script/twitch_streamlink_scripts/twitch_vod.sh';
