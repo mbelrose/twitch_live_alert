@@ -16,41 +16,40 @@ async function readConfigFile() {
   return config;
 }
 
-async function getStreamerInfo(id, clientId, accessToken) {
-  const url = `${TWITCH_API_BASE_URL}/streams?user_id=${id}`;
+async function getStreamerInfo(ids, clientId, accessToken) {
+  const url = `${TWITCH_API_BASE_URL}/streams?user_id=${ids.join('&user_id=')}`;
   const headers = {
     'Client-ID': clientId,
     'Authorization': `Bearer ${accessToken}`
   };
   const response = await fetch(url, { headers });
   const data = await response.json();
-  if (data.data.length > 0) {
-    const stream = data.data[0];
-    return {
-      id,
+  const streams = data.data;
+  if (streams.length > 0) {
+    const streamerInfo = streams.map(stream => ({
+      id: stream.user_id,
       name: stream.user_name,
       title: stream.title,
       viewerCount: stream.viewer_count
-    };
+    }));
+    return streamerInfo;
   } else {
     return null;
   }
 }
 
 async function checkStreamers(ids, clientId, accessToken) {
+  const liveStreams = await getStreamerInfo(ids, clientId, accessToken);
   const liveIds = [];
-  for (const id of ids) {
-    const streamerInfo = await getStreamerInfo(id, clientId, accessToken);
-    if (streamerInfo) {
-      const toast_message = `${streamerInfo.name} is live (${streamerInfo.viewerCount} viewers)`;
-      // to implement: add button to open stream in player
-      const command = `notify-send "${toast_message}" -t 3000`;
-      console.log(toast_message);
-      liveIds.push(id);
-    } else {
-      console.log(`${id} is not live`);
-    }
-  }
+  const streamNameList = liveStreams.map(stream => {
+    liveIds.push(stream.id);
+    return stream.name;
+  });
+  const toastMessage = 'Live stream(s): '
+    + streamNameList.join(', ');
+  console.log(toastMessage);
+  const command = `notify-send "${toastMessage}" -t 3000 -a TwitchLiveAlert -u low "${stream.title}" "${stream.name}" "${streamUrl}"`;
+  exec(command);
   return liveIds;
 }
 
