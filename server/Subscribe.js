@@ -15,20 +15,20 @@ async function writeConfigFile(config) {
   await writeFile(CONFIG_FILE, data);
 }
 
-async function getStreamerId(name, clientId, accessToken) {
-  const url = `${TWITCH_API_BASE_URL}/users?login=${name}`;
+async function getStreamerId(names, clientId, accessToken) {
+  const url = `${TWITCH_API_BASE_URL}/users?login=${names.join('&login=')}`;
   const headers = {
     'Client-ID': clientId,
     'Authorization': `Bearer ${accessToken}`
   };
   const response = await fetch(url, { headers });
   const data = await response.json();
-  if (data.data.length > 0) {
-    const user = data.data[0];
-    return user.id;
-  } else {
-    return null;
+  const users = data.data;
+  const idMap = {};
+  for (const user of users) {
+    idMap[user.login] = user.id;
   }
+  return idMap;
 }
 
 async function main() {
@@ -38,15 +38,10 @@ async function main() {
     process.exit(1);
   }
 
-  const { ids, twitchClientId, twitchAccessToken } = await readConfigFile();
-  const id = await getStreamerId(name, twitchClientId, twitchAccessToken);
-  if (id && !ids.includes(id)) {
-    ids.push(id);
-    await writeConfigFile({ ids, twitchClientId, twitchAccessToken });
-    console.log(`Added ${name} (${id}) to config`);
-  } else {
-    console.log(`${name} not found or already in config`);
-  }
+  const { names, twitchClientId, twitchAccessToken } = await readConfigFile();
+  const ids = await getStreamerId(names, twitchClientId, twitchAccessToken);
+  await writeConfigFile({ ids, twitchClientId, twitchAccessToken });
+  console.log(`import done`);
 }
 
 main().catch(console.error);
