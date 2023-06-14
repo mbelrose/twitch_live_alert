@@ -47,11 +47,11 @@ async function getStreamerId(names, clientId, accessToken) {
   const response = await fetch(url, { headers });
   // to implement: handle errors
   const data = await response.json();
-  const users = data.data;
-  // var users = JSON.parse(data.data);
+  let users = data.data;
   //convert data to a map of names to ids
-  users.map( (userItem) => {
+  users = users.map( (userItem) => {
     return userItem.id;
+    
   });
   return users;
 }
