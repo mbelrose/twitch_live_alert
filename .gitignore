@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 config/config.json
 notes.txt
+config/config_source.txt
