@@ -54,6 +54,12 @@ async function getStreamerInfo(ids, clientId, accessToken) {
 // manage list of live streamers and toast notifications
 async function checkStreamers(ids, clientId, accessToken) {
   const liveStreams = await getStreamerInfo(ids, clientId, accessToken);
+  
+  if (liveStreams === null) {
+    console.log('No streamers are live');
+    return [];
+  }
+
   const liveIds = [];
   const streamNameList = liveStreams.map(stream => {
     liveIds.push(stream.id);
