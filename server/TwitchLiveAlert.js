@@ -13,9 +13,10 @@ const sleep = promisify(setTimeout);
 
 const CONFIG_FILE = '../config/config.json';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
-const POLL_INTERVAL_MS = 600000; // 10 minutes
+const POLL_INTERVAL_MS = 5000; // 10 minutes
 
 async function readConfigFile() {
+// to implement: error if config file is corrupted or missing
   console.log(`Reading config file ${CONFIG_FILE}`);
   const data = await readFile(CONFIG_FILE);
   const config = JSON.parse(data);
