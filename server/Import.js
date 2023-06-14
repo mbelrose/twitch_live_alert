@@ -10,6 +10,9 @@ const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 
 async function readConfigFile() {
   // to implement: handle errors
+  // to implement: handle errors
+  // to implement: handle case where a name is not found
+  // to implement: handle case where a name is found multiple times
   const data = await readFile(CONFIG_FILE);
   const config = JSON.parse(data);
   return config;
@@ -17,7 +20,8 @@ async function readConfigFile() {
 
 async function readNameFile(NameFile) {
   // to implement: handle errors
-  const data = await readFile(NameFile);
+  let data = await readFile(NameFile);
+  data = data.toString();
   const names = data.split('\n');
   // extract the streamer name from the URL if it's a URL
   return names.map( (nameLine) => {
@@ -41,12 +45,12 @@ async function getStreamerId(names, clientId, accessToken) {
   const response = await fetch(url, { headers });
   // to implement: handle errors
   const data = await response.json();
-  const users = data.data;
-  const idMap = {};
-  for (const user of users) {
-    idMap[user.login] = user.id;
-  }
-  return idMap;
+  var users = JSON.parse(data.data);
+  //convert data to a map of names to ids
+  users.map( (userItem) => {
+    return userItem.id;
+  });
+  return users;
 }
 
 async function main() {
@@ -56,7 +60,7 @@ async function main() {
     process.exit(1);
   }
 
-  const { names, twitchClientId, twitchAccessToken } = await readConfigFile();
+  const { oldids, twitchClientId, twitchAccessToken } = await readConfigFile();
   const names = await readNameFile(nameFile);
   // this will overwrite old ids
   const ids = await getStreamerId(names, twitchClientId, twitchAccessToken);
