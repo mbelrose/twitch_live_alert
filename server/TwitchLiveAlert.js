@@ -69,7 +69,7 @@ async function checkStreamers(ids, clientId, accessToken) {
   const toastMessage = 'Live stream(s): '
     + streamNameList.join(', ');
   console.log(toastMessage);
-  const command = `notify-send "${toastMessage}" -t 3000 -u low "${stream.title}" "${stream.name}" "${streamUrl}"`;
+  const command = `notify-send "${toastMessage}" -t 3000 -u low`;
   exec(command);
   return liveIds;
 }
