@@ -12,12 +12,12 @@ const sleep = promisify(setTimeout);
 
 const BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
 const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
+const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 
 async function readConfigFile() {
 // to implement: error if config file is corrupted or missing or contains duplicate ids
-  console.log(`Reading config file ${CONFIG_FILE}`);
   const data = await readFile(CONFIG_FILE);
   const config = JSON.parse(data);
   return config;
@@ -67,11 +67,24 @@ async function checkStreamers(ids, clientId, accessToken) {
     liveIds.push(stream.id);
     return stream.name;
   });
-  const toastMessage = 'Live stream(s): '
-    + streamNameList.join(', ');
+
   const now = new Date();
   const timeString = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-  console.log(`[${timeString}] ${toastMessage}`);
+  const links = streamNameList.reduce(
+    (acc, name) => {
+      const link = `${TWITCH_WATCH_URL}/${name}`;
+      if (acc === '') {
+        return link;
+      } else {
+        return `${acc}, ${link}`;
+      }
+  }
+  , '');
+  const consoleMessage = `Live stream(s): [${timeString}] ${links}`;
+  console.log(consoleMessage);
+  
+  const toastMessage = 'Live stream(s): '
+    + streamNameList.join(', ');
   const command = `notify-send "${toastMessage}" -t 3000 -u low`;
   exec(command);
   return liveIds;
