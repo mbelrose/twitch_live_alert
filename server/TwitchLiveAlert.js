@@ -15,6 +15,7 @@ const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
 const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
+const PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
 
 async function readConfigFile() {
 // to implement: error if config file is corrupted or missing or contains duplicate ids
@@ -62,12 +63,14 @@ async function checkStreamers(ids, clientId, accessToken) {
     return [];
   }
 
+  // create a list of live streamer names
   const liveIds = [];
   const streamNameList = liveStreams.map(stream => {
     liveIds.push(stream.id);
     return stream.name;
   });
 
+  // print a message to the console
   const now = new Date();
   const timeString = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
   const links = streamNameList.reduce(
@@ -82,11 +85,36 @@ async function checkStreamers(ids, clientId, accessToken) {
   , '');
   const consoleMessage = `Live stream(s): [${timeString}] ${links}`;
   console.log(consoleMessage);
-  
+
+
+  // make a toast notification
   const toastMessage = 'Live stream(s): '
     + streamNameList.join(', ');
-  const command = `notify-send "${toastMessage}" -t 3000 -u low`;
-  exec(command);
+  const toastCommand = `notify-send "${toastMessage}" -t 3000 -u low`;
+  exec(toastCommand);
+
+  //make a dialogue to open stream in an app
+  const options = streamNameList.reduce(
+    (acc, name) => {
+      const link = `--extra-button ${name}`;
+      if (acc === '') {
+        return link;
+      } else {
+        return `${acc} ${link}`;
+      }
+  }
+  , '');
+  const playCommand = `zenity --info --text="Twitch Alert" ${options}`;
+  if (streamNameList.length > 0) {
+    exec(playCommand, (error, stdout, stderr) => {
+      if (stdout) {
+        const streamer = stdout.trim();
+        console.log(`Selected streamer: ${streamer}`);
+        exec(`gnome-terminal -- ${PLAYER_COMMAND}${streamer}`);
+      }
+    });
+  }
+
   return liveIds;
 }
 
