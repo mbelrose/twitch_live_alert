@@ -26,6 +26,10 @@ async function readConfigFile() {
 // returns null if no streamers are live
 // returns array of streamer info if at least one streamer is live
 async function getStreamerInfo(ids, clientId, accessToken) {
+
+  if (ids.length === 0) {
+    return null;
+  }
   const url = `${TWITCH_API_BASE_URL}/streams?user_id=${ids.join('&user_id=')}`;
   const headers = {
     'Client-ID': clientId,
