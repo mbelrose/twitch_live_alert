@@ -19,7 +19,11 @@ async function readNameFile(NameFile) {
   // to implement: handle errors
   const data = await readFile(NameFile);
   const names = data.split('\n');
-  // filter out urls if in the config file
+  // extract the streamer name from the URL if it's a URL
+  return names.map( (nameLine) => {
+    const splits = nameLine.split('/');
+    return (splits[splits.length - 1]);
+  });
 }
 
 async function writeConfigFile(config) {
@@ -56,6 +60,7 @@ async function main() {
   const names = await readNameFile(nameFile);
   // this will overwrite old ids
   const ids = await getStreamerId(names, twitchClientId, twitchAccessToken);
+  // to implement: handle errors
   await writeConfigFile({ ids, twitchClientId, twitchAccessToken });
   console.log(`import done`);
 }
