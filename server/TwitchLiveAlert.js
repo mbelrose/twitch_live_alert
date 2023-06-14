@@ -1,7 +1,13 @@
+// periodcially pools Twitch API to check if streamers are live
+// if so, sends a toast notification to the desktop
+// requires a config file with Twitch API client id and access token
+// config file contains Twitch numerical ids, not streamer names
+
 import { readFile } from 'node:fs/promises';
 import { exec } from 'child_process';
 import fetch from 'node-fetch';
 import { promisify } from 'util';
+
 
 const sleep = promisify(setTimeout);
 
@@ -16,6 +22,9 @@ async function readConfigFile() {
   return config;
 }
 
+// query Twitch API by streamerid for what is live
+// returns null if no streamers are live
+// returns array of streamer info if at least one streamer is live
 async function getStreamerInfo(ids, clientId, accessToken) {
   const url = `${TWITCH_API_BASE_URL}/streams?user_id=${ids.join('&user_id=')}`;
   const headers = {
@@ -38,6 +47,7 @@ async function getStreamerInfo(ids, clientId, accessToken) {
   }
 }
 
+// manage list of live streamers and toast notifications
 async function checkStreamers(ids, clientId, accessToken) {
   const liveStreams = await getStreamerInfo(ids, clientId, accessToken);
   const liveIds = [];
