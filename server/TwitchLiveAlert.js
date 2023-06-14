@@ -43,10 +43,9 @@ async function checkStreamers(ids, clientId, accessToken) {
     const streamerInfo = await getStreamerInfo(id, clientId, accessToken);
     if (streamerInfo) {
       const toast_message = `${streamerInfo.name} is live (${streamerInfo.viewerCount} viewers)`;
+      // to implement: add button to open stream in player
       const command = `notify-send "${toast_message}" -t 3000`;
       console.log(toast_message);
-      console.log(command);
-      exec(command);
       liveIds.push(id);
     } else {
       console.log(`${id} is not live`);
@@ -59,6 +58,8 @@ async function main() {
   let { ids, twitchClientId, twitchAccessToken } = await readConfigFile();
   while (true) {
     const liveIds = await checkStreamers(ids, twitchClientId, twitchAccessToken);
+    // will only notify when a streamer goes live
+    // to implement: readd streamer if they go offline
     ids = ids.filter(id => !liveIds.includes(id));
     await sleep(POLL_INTERVAL_MS);
   }
