@@ -38,6 +38,7 @@ async function getStreamerInfo(id, clientId, accessToken) {
 }
 
 async function checkStreamers(ids, clientId, accessToken) {
+  const liveIds = [];
   for (const id of ids) {
     const streamerInfo = await getStreamerInfo(id, clientId, accessToken);
     if (streamerInfo) {
@@ -46,16 +47,19 @@ async function checkStreamers(ids, clientId, accessToken) {
       console.log(toast_message);
       console.log(command);
       exec(command);
+      liveIds.push(id);
     } else {
       console.log(`${id} is not live`);
     }
   }
+  return liveIds;
 }
 
 async function main() {
-  const { ids, twitchClientId, twitchAccessToken } = await readConfigFile();
+  let { ids, twitchClientId, twitchAccessToken } = await readConfigFile();
   while (true) {
-    await checkStreamers(ids, twitchClientId, twitchAccessToken);
+    const liveIds = await checkStreamers(ids, twitchClientId, twitchAccessToken);
+    ids = ids.filter(id => !liveIds.includes(id));
     await sleep(POLL_INTERVAL_MS);
   }
 }
