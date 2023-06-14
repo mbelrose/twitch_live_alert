@@ -10,9 +10,6 @@ const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 
 async function readConfigFile() {
   // to implement: handle errors
-  // to implement: handle errors
-  // to implement: handle case where a name is not found
-  // to implement: handle case where a name is found multiple times
   const data = await readFile(CONFIG_FILE);
   const config = JSON.parse(data);
   return config;
@@ -22,12 +19,17 @@ async function readNameFile(NameFile) {
   // to implement: handle errors
   let data = await readFile(NameFile);
   data = data.toString();
-  const names = data.split('\n');
+  let names = data.split('\n');
   // extract the streamer name from the URL if it's a URL
-  return names.map( (nameLine) => {
-    const splits = nameLine.split('/');
-    return (splits[splits.length - 1]);
+  names = names.map( (nameLine) => {
+    const nameArr = nameLine.split('/');
+    return nameArr[nameArr.length - 1];
   });
+  // strip out any empty lines
+  names = names.filter( (nameLine) => { 
+    return nameLine.length > 0;
+  });
+  return names;
 }
 
 async function writeConfigFile(config) {
@@ -38,7 +40,6 @@ async function writeConfigFile(config) {
 // take a list of streamer names and return a map of names to ids
 async function getStreamerId(names, clientId, accessToken) {
   const url = `${TWITCH_API_BASE_URL}/users?login=${names.join('&login=')}`;
-  console.log(url);
   const headers = {
     'Client-ID': clientId,
     'Authorization': `Bearer ${accessToken}`
