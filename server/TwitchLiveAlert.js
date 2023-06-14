@@ -37,6 +37,7 @@ async function getStreamerInfo(ids, clientId, accessToken) {
     'Authorization': `Bearer ${accessToken}`
   };
   const response = await fetch(url, { headers });
+  // to implement: error if response is not 200
   const data = await response.json();
   const streams = data.data;
   if (streams.length > 0) {
