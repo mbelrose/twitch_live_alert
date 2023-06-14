@@ -8,10 +8,10 @@ import { exec } from 'child_process';
 import fetch from 'node-fetch';
 import { promisify } from 'util';
 
-
 const sleep = promisify(setTimeout);
 
-const CONFIG_FILE = '../config/config.json';
+const BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
+const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 
