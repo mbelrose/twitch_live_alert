@@ -38,6 +38,7 @@ async function writeConfigFile(config) {
 // take a list of streamer names and return a map of names to ids
 async function getStreamerId(names, clientId, accessToken) {
   const url = `${TWITCH_API_BASE_URL}/users?login=${names.join('&login=')}`;
+  console.log(url);
   const headers = {
     'Client-ID': clientId,
     'Authorization': `Bearer ${accessToken}`
@@ -45,7 +46,8 @@ async function getStreamerId(names, clientId, accessToken) {
   const response = await fetch(url, { headers });
   // to implement: handle errors
   const data = await response.json();
-  var users = JSON.parse(data.data);
+  const users = data.data;
+  // var users = JSON.parse(data.data);
   //convert data to a map of names to ids
   users.map( (userItem) => {
     return userItem.id;
