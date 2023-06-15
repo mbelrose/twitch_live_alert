@@ -1,0 +1,8 @@
+services:
+  app:
+    image: node:16
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    command: sh -c "node ./server/TwitchLiveAlert.js"
+    
