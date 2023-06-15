@@ -104,9 +104,9 @@ async function checkStreamers(ids, clientId, accessToken) {
       }
   }
   , '');
-  const playCommand = `zenity --info --text="Twitch Alert" ${options}`;
+  const popupCommand = `zenity --info --text="Twitch Alert" ${options}`;
   if (streamNameList.length > 0) {
-    exec(playCommand, (error, stdout, stderr) => {
+    exec(popupCommand, (error, stdout, stderr) => {
       if (stdout) {
         const streamer = stdout.trim();
         console.log(`Selected streamer: ${streamer}`);
