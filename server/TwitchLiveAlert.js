@@ -23,14 +23,14 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   console.log('This script is only for desktop Linux or Android Linux');
   process.exit(1);
 } else if (isAndroidLinux()) {
-  BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
+  BASE_DIRECTORY = `${process.env.HOME}/twitch_live_alert`;
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
   TERMINAL_COMMAND = 'gnome-terminal -- ';
   TOAST_COMMAND = 'notify-send -t 3000 -u low';
 } else if (isDesktopLinux()) {
-  BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
+  BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
