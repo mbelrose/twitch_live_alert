@@ -16,17 +16,18 @@ const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 
 let BASE_DIRECTORY, PLAYER_COMMAND, 
-  POPUP_COMMAND, POPUP_ARGUMENT, 
+  POPUP_COMMAND, POPUP_ARGUMENT, POPUP_LIST_DELIMINATOR,
   TERMINAL_COMMAND, TOAST_COMMAND;
 
 if (!isDesktopLinux() && !isAndroidLinux()) {
   console.log('This script is only for desktop Linux or Android Linux');
   process.exit(1);
 } else if (isAndroidLinux()) {
-  BASE_DIRECTORY = `${process.env.HOME}/twitch_live_alert`;
+  BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
+  POPUP_LIST_DELIMINATOR = ' ';
   TERMINAL_COMMAND = 'gnome-terminal -- ';
   TOAST_COMMAND = 'notify-send -t 3000 -u low';
 } else if (isDesktopLinux()) {
@@ -34,6 +35,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
+  POPUP_LIST_DELIMINATOR = ' ';
   TERMINAL_COMMAND = 'gnome-terminal -- ';
   TOAST_COMMAND = 'notify-send -t 3000 -u low';
 }
@@ -92,7 +94,7 @@ async function checkStreamers(ids, clientId, accessToken) {
     liveIds.push(stream.id);
     return stream.name;
   });
-
+  
   // print a message to the console
   const now = new Date();
   const timeString = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
@@ -123,10 +125,11 @@ async function checkStreamers(ids, clientId, accessToken) {
       if (acc === '') {
         return link;
       } else {
-        return `${acc} ${link}`;
+        return `${acc}${POPUP_LIST_DELIMINATOR}${link}`;
       }
   }
   , '');
+
   const popupCommand = `${POPUP_COMMAND} ${options}`;
   if (streamNameList.length > 0) {
     exec(popupCommand, (error, stdout, stderr) => {
