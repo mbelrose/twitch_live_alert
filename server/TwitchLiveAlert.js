@@ -15,7 +15,7 @@ const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 
-const BASE_DIRECTORY, PLAYER_COMMAND, 
+let BASE_DIRECTORY, PLAYER_COMMAND, 
   POPUP_COMMAND, POPUP_ARGUMENT, 
   TERMINAL_COMMAND, TOAST_COMMAND;
 
