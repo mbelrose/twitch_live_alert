@@ -16,7 +16,7 @@ const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 
 let BASE_DIRECTORY, PLAYER_COMMAND, 
-  POPUP_COMMAND, POPUP_ARGUMENT, POPUP_LIST_DELIMINATOR,
+  POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMINATOR,
   TERMINAL_COMMAND, TOAST_COMMAND;
 
 if (!isDesktopLinux() && !isAndroidLinux()) {
@@ -27,6 +27,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
+  POPUP_QUOTE = '"';
   POPUP_LIST_DELIMINATOR = ',';
   TERMINAL_COMMAND = '';
   TOAST_COMMAND = 'termux-toast -s';
@@ -35,6 +36,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
+  POPUP_QUOTE = '';
   POPUP_LIST_DELIMINATOR = ' ';
   TERMINAL_COMMAND = 'gnome-terminal -- ';
   TOAST_COMMAND = 'notify-send -t 3000 -u low';
@@ -130,7 +132,7 @@ async function checkStreamers(ids, clientId, accessToken) {
   }
   , '');
 
-  const popupCommand = `${POPUP_COMMAND} ${options}`;
+  const popupCommand = `${POPUP_COMMAND} ${POPUP_QUOTE}${options}${POPUP_QUOTE}`;
   if (streamNameList.length > 0) {
     exec(popupCommand, (error, stdout, stderr) => {
       if (stdout) {
