@@ -16,6 +16,10 @@ const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 const PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
+const POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
+const POPUP_ARGUMENT = '--extra-button';
+const TERMINAL_COMMAND = 'gnome-terminal -- ';
+const TOAST_COMMAND = 'notify-send -t 3000 -u low';
 
 async function readConfigFile() {
 // to implement: error if config file is corrupted or missing or contains duplicate ids
@@ -90,13 +94,13 @@ async function checkStreamers(ids, clientId, accessToken) {
   // make a toast notification
   const toastMessage = 'Live stream(s): '
     + streamNameList.join(', ');
-  const toastCommand = `notify-send "${toastMessage}" -t 3000 -u low`;
+  const toastCommand = `${TOAST_COMMAND} "${toastMessage}"`;
   exec(toastCommand);
 
   //make a dialogue to open stream in an app
   const options = streamNameList.reduce(
     (acc, name) => {
-      const link = `--extra-button ${name}`;
+      const link = `${POPUP_ARGUMENT} ${name}`;
       if (acc === '') {
         return link;
       } else {
@@ -104,13 +108,13 @@ async function checkStreamers(ids, clientId, accessToken) {
       }
   }
   , '');
-  const popupCommand = `zenity --info --text="Twitch Alert" ${options}`;
+  const popupCommand = `${POPUP_COMMAND} ${options}`;
   if (streamNameList.length > 0) {
     exec(popupCommand, (error, stdout, stderr) => {
       if (stdout) {
         const streamer = stdout.trim();
         console.log(`Selected streamer: ${streamer}`);
-        exec(`gnome-terminal -- ${PLAYER_COMMAND}${streamer}`);
+        exec(`${TERMINAL_COMMAND}${PLAYER_COMMAND}${streamer}`);
       }
     });
   }
