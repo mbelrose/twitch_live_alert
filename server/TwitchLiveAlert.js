@@ -132,7 +132,8 @@ async function checkStreamers(ids, clientId, accessToken) {
   }
   , '');
 
-  const popupCommand = `${POPUP_COMMAND} ${POPUP_QUOTE}${options}${POPUP_QUOTE}`;
+  const popupCommand = 
+    `${POPUP_COMMAND} ${POPUP_QUOTE}${options}${POPUP_QUOTE}`;
   if (streamNameList.length > 0) {
     exec(popupCommand, (error, stdout, stderr) => {
       if (stdout) {
