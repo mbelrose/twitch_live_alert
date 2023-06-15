@@ -7,19 +7,34 @@ import { readFile } from 'node:fs/promises';
 import { exec } from 'child_process';
 import fetch from 'node-fetch';
 import { promisify } from 'util';
+import { isDesktopLinux, isAndroidLinux } from './lib/TestEnvironment.js';
 
 const sleep = promisify(setTimeout);
 
-const BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
+if (!isDesktopLinux() && !isAndroidLinux()) {
+  console.log('This script is only for desktop Linux or Android Linux');
+  process.exit(1);
+} elseif (isAndroidLinux()) {
+  const BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
+  const PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
+  const POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
+  const POPUP_ARGUMENT = '--extra-button';
+  const TERMINAL_COMMAND = 'gnome-terminal -- ';
+  const TOAST_COMMAND = 'notify-send -t 3000 -u low';
+} elseif (isDesktopLinux()) {
+  const BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
+  const PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
+  const POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
+  const POPUP_ARGUMENT = '--extra-button';
+  const TERMINAL_COMMAND = 'gnome-terminal -- ';
+  const TOAST_COMMAND = 'notify-send -t 3000 -u low';
+}
+
+
 const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
 const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
-const PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
-const POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
-const POPUP_ARGUMENT = '--extra-button';
-const TERMINAL_COMMAND = 'gnome-terminal -- ';
-const TOAST_COMMAND = 'notify-send -t 3000 -u low';
 
 async function readConfigFile() {
 // to implement: error if config file is corrupted or missing or contains duplicate ids
