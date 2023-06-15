@@ -1,4 +1,4 @@
-const os = require('os');
+import os from 'os';
 
 export const isDesktopLinux = () => {
   const platform = os.platform();
