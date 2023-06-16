@@ -86,7 +86,6 @@ async function checkStreamers(ids, clientId, accessToken) {
   const liveStreams = await getStreamerInfo(ids, clientId, accessToken);
 
   if (liveStreams === null) {
-    console.log('No new streamers have gone live');
     return [];
   }
 
