@@ -31,7 +31,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   POPUP_LIST_DELIMINATOR = ',';
   TERMINAL_COMMAND = '';
   TOAST_COMMAND = 'termux-toast -s';
-} else if (isDesktopLinux()) {
+} else {
   BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
@@ -136,7 +136,12 @@ async function checkStreamers(ids, clientId, accessToken) {
   if (streamNameList.length > 0) {
     exec(popupCommand, (error, stdout, stderr) => {
       if (stdout) {
-        const streamer = stdout.trim();
+        let streamer;
+        if (isAndroidLinux()) {
+          streamer = JSON.parse(stdout).text;
+        } else {
+          streamer = stdout.trim();
+        }
         console.log(`Selected streamer: ${streamer}`);
         exec(`${TERMINAL_COMMAND}${PLAYER_COMMAND}${streamer}`);
       }
