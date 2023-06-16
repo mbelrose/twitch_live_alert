@@ -23,7 +23,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   console.log('This script is only for desktop Linux or Android Linux');
   process.exit(1);
 } else if (isAndroidLinux()) {
-  BASE_DIRECTORY = `${process.env.HOME}/twitch_live_alert`;
+  BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
