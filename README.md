@@ -1,4 +1,3 @@
-```
 # Twitch Live Alert
 
 Query twitch for live channels
@@ -7,19 +6,12 @@ Query twitch for live channels
 
 To install the project dependencies, run the following command:
 
-```
-sudo apt-get install libnotify-bin
-npm install
-```
+    sudo apt-get install libnotify-bin
+    npm install
 
 ## Usage
 
-
-
 To run the project, run the following command:
 
-```
-node {install directory}/server/Import.js {file of twitch urls}
-node {install directory}/server/TwitchLiveAlert.js
-```
-
+    node {install directory}/server/Import.js {file of twitch urls}
+    node {install directory}/server/TwitchLiveAlert.js
