@@ -3,10 +3,20 @@
 
 import { readFile, writeFile } from 'node:fs/promises';
 import fetch from 'node-fetch';
+import { isDesktopLinux, isAndroidLinux } from './lib/TestEnvironment.js';
 
-const BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert/`;
-const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
+let BASE_DIRECTORY;
+
+if (!isDesktopLinux() && !isAndroidLinux()) {
+  console.log('This script is only for desktop Linux or Android Linux');
+  process.exit(1);
+} else if (isAndroidLinux()) {
+  BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
+} else {
+  BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
+}
+const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
 
 async function readConfigFile() {
   // to implement: handle errors
