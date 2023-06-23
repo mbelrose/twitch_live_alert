@@ -15,7 +15,7 @@ const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 
-let BASE_DIRECTORY, PLAYER_COMMAND, 
+let BASE_DIRECTORY, PLAYER_COMMAND, PLAYER_COMMAND_SUFFIX,
   POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMINATOR,
   TERMINAL_COMMAND, TOAST_COMMAND;
 
@@ -24,7 +24,8 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   process.exit(1);
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
-  PLAYER_COMMAND = `am start -a android.intent.action.VIEW -n org.mozilla.firefox/org.mozilla.gecko.BrowserApp --ez private_browsing true -d https://player.twitch.tv/?parent=twitch.tv&channel=`;
+  PLAYER_COMMAND_SUFFIX = '"';
+  PLAYER_COMMAND = `am start -a android.intent.action.VIEW -n org.mozilla.firefox/org.mozilla.gecko.BrowserApp --ez private_browsing true -d "https://player.twitch.tv/?parent=twitch.tv&channel=`;
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
   POPUP_QUOTE = '"';
@@ -33,6 +34,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   TOAST_COMMAND = 'termux-toast -s';
 } else {
   BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
+  PLAYER_COMMAND_SUFFIX = '';
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
@@ -143,7 +145,7 @@ async function checkStreamers(ids, clientId, accessToken) {
           streamer = stdout.trim();
         }
         console.log(`Selected streamer: ${streamer}`);
-        exec(`${TERMINAL_COMMAND}${PLAYER_COMMAND}${streamer}`);
+        exec(`${TERMINAL_COMMAND}${PLAYER_COMMAND}${streamer}${PLAYER_COMMAND_SUFFIX}`);
       }
     });
   }
