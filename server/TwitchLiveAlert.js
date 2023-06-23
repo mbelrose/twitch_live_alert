@@ -25,7 +25,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
   PLAYER_COMMAND_SUFFIX = '"';
-  PLAYER_COMMAND = `am start -a android.intent.action.VIEW -n org.mozilla.firefox/org.mozilla.gecko.BrowserApp --ez private_browsing true -d "https://player.twitch.tv/?parent=twitch.tv&channel=`;
+  PLAYER_COMMAND = `termux-clipboard-set "https://player.twitch.tv/?parent=twitch.tv&channel=`;
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
   POPUP_QUOTE = '"';
