@@ -24,8 +24,8 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   process.exit(1);
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
-  PLAYER_COMMAND_SUFFIX = '"';
-  PLAYER_COMMAND = `termux-clipboard-set "https://player.twitch.tv/?parent=twitch.tv&channel=`;
+  PLAYER_COMMAND_SUFFIX = '';
+  PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
   POPUP_QUOTE = '"';
