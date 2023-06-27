@@ -25,7 +25,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
   PLAYER_COMMAND_SUFFIX = '';
-  PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
+  PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/ ; player=am start -n org.videolan.vlc/org.videolan.vlc.gui.video.VideoPlayerActivity -a android.intent.action.VIEW -d http://127.0.0.1:8080/`;
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
   POPUP_QUOTE = '"';
