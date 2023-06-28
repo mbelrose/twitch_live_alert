@@ -7,7 +7,7 @@ import { readFile } from 'node:fs/promises';
 import { exec } from 'child_process';
 import fetch from 'node-fetch';
 import { promisify } from 'util';
-import { isDesktopLinux, isAndroidLinux } from './lib/TestEnvironment.js';
+import { isDesktopLinux, isAndroidLinux, isWindows } from './lib/TestEnvironment.js';
 
 const sleep = promisify(setTimeout);
 
@@ -15,15 +15,16 @@ const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 600000; // 10 minutes
 
-let BASE_DIRECTORY, PLAYER_COMMAND, PLAYER_COMMAND_SUFFIX,
+let BASE_DIRECTORY, CONFIG_FILE, PLAYER_COMMAND, PLAYER_COMMAND_SUFFIX,
   POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMINATOR,
   TERMINAL_COMMAND, TOAST_COMMAND;
 
-if (!isDesktopLinux() && !isAndroidLinux()) {
-  console.log('This script is only for desktop Linux or Android Linux');
+if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
+  console.log('This script is only for Windows, desktop Linux or Android Linux');
   process.exit(1);
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
+  CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
   PLAYER_COMMAND_SUFFIX = '';
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'termux-dialog radio -v';
@@ -32,8 +33,21 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   POPUP_LIST_DELIMINATOR = ',';
   TERMINAL_COMMAND = '';
   TOAST_COMMAND = 'termux-toast -s';
+} else if (isWindows()) {
+  BASE_DIRECTORY = '';
+  CONFIG_FILE = 'C:\\Program Files (x86)\\twitch_live_alert_win\\twitch_live_alert\\config\\config.json';
+  PLAYER_COMMAND_SUFFIX = '';
+  PLAYER_COMMAND = '';
+  POPUP_COMMAND = '';
+  POPUP_ARGUMENT = '';
+  POPUP_QUOTE = '';
+  POPUP_LIST_DELIMINATOR = '';
+  TERMINAL_COMMAND = '';
+  TOAST_COMMAND = 'New-BurntToastNotification -SnoozeAndDismiss -Text';
+// TODO: fix, switch to node-notifier
 } else {
   BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
+  CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
   PLAYER_COMMAND_SUFFIX = '';
   PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
@@ -44,7 +58,6 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   TOAST_COMMAND = 'notify-send -t 3000 -u low';
 }
 
-const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
 
 async function readConfigFile() {
 // to implement: error if config file is corrupted or missing or contains duplicate ids

@@ -17,3 +17,11 @@ export const isAndroidLinux = () => {
     return false;
   }
 };
+
+export const isWindows = () => {
+  if (platform === 'win32') {
+    return true;
+  } else {
+    return false;
+  }
+};
