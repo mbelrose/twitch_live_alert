@@ -17,7 +17,7 @@ const POLL_INTERVAL_MS = 600000; // 10 minutes
 
 let BASE_DIRECTORY, CONFIG_FILE, PLAYER_COMMAND, PLAYER_COMMAND_SUFFIX,
   POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMINATOR,
-  TERMINAL_COMMAND, TOAST_COMMAND;
+  TERMINAL_COMMAND, TOAST_COMMAND, TOAST_QUOT;
 
 if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
   console.log('This script is only for Windows, desktop Linux or Android Linux');
@@ -33,6 +33,7 @@ if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
   POPUP_LIST_DELIMINATOR = ',';
   TERMINAL_COMMAND = '';
   TOAST_COMMAND = 'termux-toast -s';
+  TOAST_QUOT = '"';
 } else if (isWindows()) {
   BASE_DIRECTORY = '';
   CONFIG_FILE = 'C:\\Program Files (x86)\\twitch_live_alert_win\\twitch_live_alert\\config\\config.json';
@@ -43,8 +44,9 @@ if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
   POPUP_QUOTE = '';
   POPUP_LIST_DELIMINATOR = '';
   TERMINAL_COMMAND = '';
-  TOAST_COMMAND = 'New-BurntToastNotification -SnoozeAndDismiss -Text';
-// TODO: fix, switch to node-notifier
+  TOAST_COMMAND = 'Powershell -c New-BurntToastNotification -Text';
+  TOAST_QUOT = '\\"';
+
 } else {
   BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
   CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
@@ -56,6 +58,7 @@ if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
   POPUP_LIST_DELIMINATOR = ' ';
   TERMINAL_COMMAND = 'gnome-terminal -- ';
   TOAST_COMMAND = 'notify-send -t 3000 -u low';
+  TOAST_QUOT = '"';
 }
 
 
@@ -100,6 +103,7 @@ async function getStreamerInfo(ids, clientId, accessToken) {
 async function checkStreamers(ids, clientId, accessToken) {
   const liveStreams = await getStreamerInfo(ids, clientId, accessToken);
 
+
   if (liveStreams === null) {
     return [];
   }
@@ -131,7 +135,7 @@ async function checkStreamers(ids, clientId, accessToken) {
   // make a toast notification
   const toastMessage = 'Live stream(s): '
     + streamNameList.join(', ');
-  const toastCommand = `${TOAST_COMMAND} "${toastMessage}"`;
+  const toastCommand = `${TOAST_COMMAND} ${TOAST_QUOT}${toastMessage}${TOAST_QUOT}`;
   exec(toastCommand);
 
   //make a dialogue to open stream in an app
