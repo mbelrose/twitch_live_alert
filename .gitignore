@@ -25,3 +25,4 @@ dist-ssr
 config/config.json
 notes.txt
 config/config_source.txt
+config/client_secret.txt
