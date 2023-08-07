@@ -3,6 +3,12 @@
 // requires a config file with Twitch API client id and access token
 // config file contains Twitch numerical ids, not streamer names
 
+// to initialize and maybe regenerate access token:
+// curl -X POST 'https://id.twitch.tv/oauth2/token' \
+// -H 'Content-Type: application/x-www-form-urlencoded' \
+// -d 'client_id=<your client id goes here>&client_secret=<your client secret goes here>&grant_type=client_credentials'
+
+
 import { readFile } from 'node:fs/promises';
 import { exec } from 'child_process';
 import fetch from 'node-fetch';
