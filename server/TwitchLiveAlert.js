@@ -130,7 +130,7 @@ async function checkStreamers(ids, clientId, accessToken) {
       if (acc === '') {
         return link;
       } else {
-        return `${acc}, ${link}`;
+        return `${acc} , ${link}`;
       }
   }
   , '');
