@@ -31,8 +31,8 @@ if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
   CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
-  PLAYER_COMMAND_SUFFIX = '';
-  PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
+  PLAYER_COMMAND_SUFFIX = ')';
+  PLAYER_COMMAND = `am start -n org.videolan.vlc/org.videolan.vlc.gui.video.VideoPlayerActivity -a android.intent.action.VIEW -d $(yt-dlp -f "480p,480p30" -g ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
   POPUP_QUOTE = '"';
@@ -56,8 +56,8 @@ if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
 } else {
   BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
   CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
-  PLAYER_COMMAND_SUFFIX = '';
-  PLAYER_COMMAND = `streamlink ${TWITCH_WATCH_URL}/`;
+  PLAYER_COMMAND_SUFFIX = ')';
+  PLAYER_COMMAND = `vlc $(yt-dlp -f "480p,480p30" -g ${TWITCH_WATCH_URL}/`;
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
   POPUP_QUOTE = '';
