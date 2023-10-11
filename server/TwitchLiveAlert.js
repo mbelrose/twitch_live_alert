@@ -88,10 +88,31 @@ async function getStreamerInfo(ids, clientId, accessToken) {
     'Client-ID': clientId,
     'Authorization': `Bearer ${accessToken}`
   };
-  const response = await fetch(url, { headers });
-  // to implement: error if response is not 200
-  const data = await response.json();
-  const streams = data.data;
+  let response;
+  try {
+    response = await fetch(url, { headers });
+  } catch (error) {
+    console.log(`The server did not respond. 
+    ${error.message}`) // this might leak access token, ok for local
+  }
+  let data;
+  try {
+    if (response.ok) {
+      data = await response.json();
+    } else {
+      console.log(`The server returned an error.  ${response.status}: ${response.statusText}`);
+      console.log ('Do you need to regenerate the access token? See RegenerateAccessToken.js');
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  let streams = { length: 0};
+  try {
+    streams = data.data;
+  } catch (error) {
+    console.log(error.message);
+  }
   if (streams.length > 0) {
     const streamerInfo = streams.map(stream => ({
       id: stream.user_id,
