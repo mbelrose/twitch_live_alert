@@ -88,10 +88,23 @@ async function getStreamerInfo(ids, clientId, accessToken) {
     'Client-ID': clientId,
     'Authorization': `Bearer ${accessToken}`
   };
-  const response = await fetch(url, { headers });
-  // to implement: error if response is not 200
-  const data = await response.json();
-  const streams = data.data;
+
+  let streams = {length: 0};
+  fetch(url, { headers })
+  .then(
+    response => {
+      if (response.ok) {
+        response.json()
+        .then( data => {
+          streams = data.data;
+        });
+      } else {
+        console.log(`The server returned an error.  ${response.status}: ${response.statusText}`);
+      }
+    }
+  )
+  .catch( error => {console.log('The server did not respond.')});
+  
   if (streams.length > 0) {
     const streamerInfo = streams.map(stream => ({
       id: stream.user_id,
