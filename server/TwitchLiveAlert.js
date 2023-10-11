@@ -100,6 +100,7 @@ async function getStreamerInfo(ids, clientId, accessToken) {
         });
       } else {
         console.log(`The server returned an error.  ${response.status}: ${response.statusText}`);
+        console.log ('Do you need to regenerate the access token? See RegenerateAccessToken.js');
       }
     }
   )
