@@ -90,7 +90,7 @@ async function getStreamerInfo(ids, clientId, accessToken) {
   };
 
   let streams = {length: 0};
-  fetch(url, { headers })
+  fetch(url, { headers: headers })
   .then(
     response => {
       if (response.ok) {
