@@ -95,8 +95,8 @@ async function getStreamerInfo(ids, clientId, accessToken) {
     response => {
       if (response.ok) {
         response.json()
-        .then( data => {
-          streams = data.data;
+        .then( repsonseData => {
+          streams = repsonseData.data;
         }).catch(e=>console.log(e.message));
       } else {
         console.log(`The server returned an error.  ${response.status}: ${response.statusText}`);
