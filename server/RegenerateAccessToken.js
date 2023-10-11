@@ -33,20 +33,21 @@ async function writeConfigFile(config) {
   await writeFile(CONFIG_FILE, data);
 }
 
-// 
 async function regenerateToken(clientID, clientSecret) {
 
   const headers = {
-    'Content-Type': `x-www-form-urlencoded`
+    'Content-Type': `application/x-www-form-urlencoded`
   };
   const body = `client_id=${clientID}&client_secret=${clientSecret}&grant_type=client_credentials`;
-  const response = await fetch(${TWITCH_API_BASE_URL}, {
+  const response = await fetch(TWITCH_API_BASE_URL, {
     method: "POST",
-    headers : headers, 
-    body:body });
+    headers: headers, 
+    body: body });
   // to implement: handle errors
   const data = await response.json();
-  const twitchAccessToken = data.data.access_token;
+  console.log('RESPONSE RAWTEXT:')
+  console.log(data);
+  const twitchAccessToken = data.access_token;
   return twitchAccessToken;
 
 }
@@ -54,9 +55,9 @@ async function regenerateToken(clientID, clientSecret) {
 async function main() {
 
   let clientID = await readFile(CLIENT_ID_FILE);
-  clientID = clientID.toString();
+  clientID = clientID.toString().trimEnd();
   let clientSecret = await readFile(CLIENT_SECRET_FILE);
-  clientSecret = clientSecret.toString();
+  clientSecret = clientSecret.toString().trimEnd();
 
   const config = await readConfigFile();
   // to implement: handle errors
