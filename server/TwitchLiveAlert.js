@@ -97,14 +97,15 @@ async function getStreamerInfo(ids, clientId, accessToken) {
         response.json()
         .then( data => {
           streams = data.data;
-        });
+        }).catch(e=>console.log(e.message));
       } else {
         console.log(`The server returned an error.  ${response.status}: ${response.statusText}`);
         console.log ('Do you need to regenerate the access token? See RegenerateAccessToken.js');
       }
     }
   )
-  .catch( error => {console.log('The server did not respond.')});
+  .catch( error => {console.log(`The server did not respond. 
+    ${error.message}`)});
   
   if (streams.length > 0) {
     const streamerInfo = streams.map(stream => ({
