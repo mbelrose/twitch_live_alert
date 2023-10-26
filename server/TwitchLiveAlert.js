@@ -19,7 +19,7 @@ const sleep = promisify(setTimeout);
 
 const TWITCH_WATCH_URL = 'https://www.twitch.tv';
 const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
-const POLL_INTERVAL_MS = 600000; // 10 minutes
+const POLL_INTERVAL_MS = 120000; // 3 minutes
 
 let BASE_DIRECTORY, CONFIG_FILE, PLAYER_COMMAND, PLAYER_COMMAND_SUFFIX,
   POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMINATOR,
