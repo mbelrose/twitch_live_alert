@@ -56,8 +56,8 @@ if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
 } else {
   BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
   CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
-  PLAYER_COMMAND_SUFFIX = ')';
-  PLAYER_COMMAND = `vlc $(yt-dlp -f "480p,480p30" -g ${TWITCH_WATCH_URL}/`;
+  PLAYER_COMMAND_SUFFIX = '';
+  PLAYER_COMMAND = '/media/mint/Local\\ Disk/Users/user.DESKTOP-6UBKKRI/Documents/local_script/youtube_dl_scripts/youtube-dl_video_stream_twitch.sh ';
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
   POPUP_QUOTE = '';
