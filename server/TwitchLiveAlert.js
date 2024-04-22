@@ -44,7 +44,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   BASE_DIRECTORY = `/mnt/8cba077b-050c-47b9-9e82-8c8b0730ca1e/opt/twitch_live_alert`;
   CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
   PLAYER_COMMAND_SUFFIX = '';
-  PLAYER_COMMAND = '${process.env.HOME}/Documents/local_script/youtube_dl_scripts/youtube-dl_video_stream_twitch.sh ';
+  PLAYER_COMMAND = '/mnt/8cba077b-050c-47b9-9e82-8c8b0730ca1e/Documents/local_script/youtube_dl_scripts/youtube-dl_video_stream_twitch.sh ';
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
   POPUP_QUOTE = '';
