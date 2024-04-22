@@ -25,8 +25,8 @@ let BASE_DIRECTORY, CONFIG_FILE, PLAYER_COMMAND, PLAYER_COMMAND_SUFFIX,
   POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMINATOR,
   TERMINAL_COMMAND, TOAST_COMMAND, TOAST_QUOT;
 
-if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
-  console.log('This script is only for Windows, desktop Linux or Android Linux');
+if (!isDesktopLinux() && !isAndroidLinux()) {
+  console.log('This script is only for desktop Linux or Android Linux');
   process.exit(1);
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
@@ -40,24 +40,11 @@ if (!isDesktopLinux() && !isAndroidLinux() && !isWindows()) {
   TERMINAL_COMMAND = '';
   TOAST_COMMAND = 'termux-toast -s';
   TOAST_QUOT = '"';
-} else if (isWindows()) {
-  BASE_DIRECTORY = '';
-  CONFIG_FILE = 'C:\\Program Files (x86)\\twitch_live_alert_win\\twitch_live_alert\\config\\config.json';
-  PLAYER_COMMAND_SUFFIX = '';
-  PLAYER_COMMAND = '';
-  POPUP_COMMAND = '';
-  POPUP_ARGUMENT = '';
-  POPUP_QUOTE = '';
-  POPUP_LIST_DELIMINATOR = '';
-  TERMINAL_COMMAND = '';
-  TOAST_COMMAND = 'Powershell -c New-BurntToastNotification -Text';
-  TOAST_QUOT = '\\"';
-
 } else {
-  BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
+  BASE_DIRECTORY = `/home/mint/.local/opt/twitch_live_alert`;
   CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
   PLAYER_COMMAND_SUFFIX = '';
-  PLAYER_COMMAND = '/media/mint/Local\\ Disk/Users/user.DESKTOP-6UBKKRI/Documents/local_script/youtube_dl_scripts/youtube-dl_video_stream_twitch.sh ';
+  PLAYER_COMMAND = '${process.env.HOME}/Documents/local_script/youtube_dl_scripts/youtube-dl_video_stream_twitch.sh ';
   POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
   POPUP_ARGUMENT = '--extra-button';
   POPUP_QUOTE = '';
