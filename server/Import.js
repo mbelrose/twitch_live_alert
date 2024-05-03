@@ -14,7 +14,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
 } else if (isAndroidLinux()) {
   BASE_DIRECTORY = `${process.env.HOME}/.local/opt/twitch_live_alert`;
 } else {
-  BASE_DIRECTORY = `${process.env.HOME}/webdev_repositories_personal/twitch_live_alert`;
+  BASE_DIRECTORY = `/mnt/8cba077b-050c-47b9-9e82-8c8b0730ca1e/opt/twitch_live_alert`;
 }
 const CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
 
