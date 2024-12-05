@@ -173,7 +173,6 @@ async function checkStreamers(ids, clientId, accessToken) {
   const popupCommand = 
     `${POPUP_COMMAND} ${POPUP_QUOTE}${options}${POPUP_QUOTE}`;
   if (streamNameList.length > 0) {
-    console.log (`xxx${popupCommand}xxx`);
     exec(popupCommand, (error, stdout, stderr) => {
       if (stdout) {
         let streamer;
