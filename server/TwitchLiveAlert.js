@@ -22,7 +22,7 @@ const TWITCH_API_BASE_URL = 'https://api.twitch.tv/helix';
 const POLL_INTERVAL_MS = 120000; // 3 minutes
 
 let BASE_DIRECTORY, CONFIG_FILE, PLAYER_COMMAND, PLAYER_COMMAND_SUFFIX,
-  POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMINATOR,
+  POPUP_COMMAND, POPUP_ARGUMENT, POPUP_QUOTE, POPUP_LIST_DELIMITOR,
   TERMINAL_COMMAND, TOAST_COMMAND, TOAST_QUOT;
 
 if (!isDesktopLinux() && !isAndroidLinux()) {
@@ -36,7 +36,7 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   POPUP_COMMAND = 'termux-dialog radio -v';
   POPUP_ARGUMENT = '';
   POPUP_QUOTE = '"';
-  POPUP_LIST_DELIMINATOR = ',';
+  POPUP_LIST_DELIMITOR = ',';
   TERMINAL_COMMAND = '';
   TOAST_COMMAND = 'termux-toast -s';
   TOAST_QUOT = '"';
@@ -45,10 +45,16 @@ if (!isDesktopLinux() && !isAndroidLinux()) {
   CONFIG_FILE = `${BASE_DIRECTORY}/config/config.json`;
   PLAYER_COMMAND_SUFFIX = '';
   PLAYER_COMMAND = '/mnt/8cba077b-050c-47b9-9e82-8c8b0730ca1e/Documents/local_script/youtube_dl_scripts/youtube-dl_video_stream_twitch.sh ';
-  POPUP_COMMAND = 'zenity --info --text="Twitch Alert"';
-  POPUP_ARGUMENT = '--extra-button';
+  // using plaintext match, so make sure no tag text is contained in another 
+  POPUP_COMMAND = '\
+    zenity --list --radiolist \
+    --title="Twitch Alert" --height=600 --width=600 \
+    --print-column=2 \
+    --column=radiobutton --column=streamer_id \
+  ';
+  POPUP_ARGUMENT = 'FALSE';
   POPUP_QUOTE = '';
-  POPUP_LIST_DELIMINATOR = ' ';
+  POPUP_LIST_DELIMITOR = ' ';
   TERMINAL_COMMAND = 'gnome-terminal -- ';
   TOAST_COMMAND = 'notify-send -t 3000 -u low';
   TOAST_QUOT = '"';
@@ -159,7 +165,7 @@ async function checkStreamers(ids, clientId, accessToken) {
       if (acc === '') {
         return link;
       } else {
-        return `${acc}${POPUP_LIST_DELIMINATOR}${link}`;
+        return `${acc}${POPUP_LIST_DELIMITOR}${link}`;
       }
   }
   , '');
@@ -167,6 +173,7 @@ async function checkStreamers(ids, clientId, accessToken) {
   const popupCommand = 
     `${POPUP_COMMAND} ${POPUP_QUOTE}${options}${POPUP_QUOTE}`;
   if (streamNameList.length > 0) {
+    console.log (`xxx${popupCommand}xxx`);
     exec(popupCommand, (error, stdout, stderr) => {
       if (stdout) {
         let streamer;
